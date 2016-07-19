@@ -1,0 +1,4 @@
+<?php
+function userengage_uninstall() {
+  variable_del('userengage_app_key');
+}

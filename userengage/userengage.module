@@ -1,0 +1,67 @@
+<?php
+/**
+ * UserEngage.io 2015
+ */
+
+function userengage_menu() {
+  $items = array();
+
+  $items['admin/config/services/userengage'] = array(
+    'title' => t('UserEngage.io'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('userengage_admin_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'userengage.admin.inc',
+  );
+
+  $items['admin/config/services/userengage/settings'] = array(
+    'title' => t('UserEngage.io'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('userengage_admin_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'userengage.admin.inc',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+function userengage_page_alter(&$page) {
+  global $user;
+
+  if ($app_key = variable_get('userengage_app_key', '') ) {
+      $page[variable_get('userengage_region', 'page_bottom')]['userengage'] = array(
+        '#markup' => _userengage_get_script($user, $app_key),
+      );
+  }
+}
+
+function _userengage_get_script($account, $app_key) {
+  global $user;
+
+  if ( $user->uid ) {
+    $UserEngage_settings = array(
+      'apiKey' => $app_key,
+      'name' => $account->name,
+      'email' => $account->mail,
+    );
+     $output = "
+      <script>window.civchat = {
+        apiKey: '$app_key',
+        name: '". $account ->name ."',
+        email: '". $account->mail ."'
+      };</script><script src=\"https://widget.userengage.io/widget.js/\"></script>";
+  }
+  else {
+   $UserEngage_settings = array(
+      'apiKey' => $app_key,
+    );
+    $output = "
+    <script>window.civchat = {
+      apiKey: '$app_key',
+      name: '',
+      email: ''
+    };</script><script src=\"https://widget.userengage.io/widget.js\"></script>";
+  }
+  return $output;
+}

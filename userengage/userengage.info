@@ -1,0 +1,12 @@
+name = UserEngage.io
+description = UserEngage integration with Drupal7
+core = 7.x
+package = Other
+configure = admin/config/services/userengage
+
+; Information added by Drupal.org packaging script on 2015-08-03
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "userengage"
+datestamp = "1438675245"
+
